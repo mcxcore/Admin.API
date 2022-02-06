@@ -10,5 +10,6 @@ namespace Admin.API.Controllers.Admin
     [Area("admin")]
     public class AreaController :BaseController
     {
+
     }
 }

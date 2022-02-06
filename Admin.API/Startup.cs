@@ -1,3 +1,7 @@
+using Admin.API.Db;
+using Admin.API.Filters;
+using Admin.Common.Attributes;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,15 +14,19 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Admin.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostEnvironment env;
+
+        public Startup(IConfiguration configuration,IWebHostEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -27,8 +35,10 @@ namespace Admin.API
         public void ConfigureServices(IServiceCollection services)
         {
             //数据库
-            //services
-            services.AddControllers();
+            services.AddDbAsync(env).Wait();
+            services.AddControllers(options=> {
+                options.Filters.Add<AdminExceptionFilter>();
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin.API", Version = "v1" });
@@ -58,6 +68,47 @@ namespace Admin.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        /// <summary>
+        /// 配置容器
+        /// </summary>
+        /// <param name="builder"></param>
+        public void ConfigureContainer(ContainerBuilder builder) {
+            #region Autofac IOC容器
+            try
+            {
+                 //无接口注入单列
+                var assemblyCommon = Assembly.Load("Admin.Common");
+                builder.RegisterAssemblyTypes(assemblyCommon)
+                    .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
+                    .SingleInstance();
+
+                //有接口注入单例
+                builder.RegisterAssemblyTypes(assemblyCommon)
+                    .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
+
+                //Repository
+                var assemblyRepository = Assembly.Load("Admin.Repository");
+                builder.RegisterAssemblyTypes(assemblyRepository)
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope()
+                    .PropertiesAutowired();
+
+                //Service
+                var assemblyService = Assembly.Load("Admin.Service");
+                 builder.RegisterAssemblyTypes(assemblyService)
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope()
+                    .PropertiesAutowired();
+
+            }
+            catch (Exception ex) {
+                
+            }
+            #endregion
         }
     }
 }

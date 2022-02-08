@@ -2,6 +2,7 @@ using Admin.API.Db;
 using Admin.API.Filters;
 using Admin.Common.Attributes;
 using Autofac;
+using Dnc.Api.Throttle;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,11 +39,23 @@ namespace Admin.API
             services.AddDbAsync(env).Wait();
             services.AddControllers(options=> {
                 options.Filters.Add<AdminExceptionFilter>();
+                options.Filters.Add(typeof(ApiThrottleActionFilter));
+
             });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin.API", Version = "v1" });
             });
+
+            #region ÏÞÁ÷
+            services.AddApiThrottle(options =>
+            {
+                options.UseRedisCacheAndStorage(opts =>
+                {
+                    opts.ConnectionString = "127.0.0.1:6379,password=,defaultDatabase=0";
+                });
+            });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +76,9 @@ namespace Admin.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseApiThrottle();
+
 
             app.UseEndpoints(endpoints =>
             {

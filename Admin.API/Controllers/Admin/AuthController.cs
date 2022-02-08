@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Admin.Service.Admin.Auth;
+using Dnc.Api.Throttle;
 
 namespace Admin.API.Controllers.Admin
 {
@@ -24,6 +25,7 @@ namespace Admin.API.Controllers.Admin
         }
 
         [HttpPost]
+        [RateValve(Policy=Policy.Ip,Limit =10,Duration =30)]
         public IResponseOutput test()
         {
             var test = _userService.test();

@@ -22,11 +22,11 @@ namespace Admin.Common.Cache
 
         bool Set(string key,object value);
 
-        bool Set(string key, object value, TimeSpan timeSpan);
+        bool Set(string key, object value, TimeSpan expire);
 
         Task<bool> SetAsync(string key, object value);
 
-        Task<bool> SetAsync(string key, object value,TimeSpan timeSpan);
+        Task<bool> SetAsync(string key, object value,TimeSpan expire);
 
     }
 }

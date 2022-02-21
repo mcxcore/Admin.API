@@ -18,52 +18,63 @@ namespace Admin.Common.Cache
 
         public long Del(params string[] key)
         {
-            throw new NotImplementedException();
+            foreach (var item in key) {
+                _memoryCache.Remove(item);
+            }
+            return key.Length;
         }
 
         public Task<long> DelAsync(params string[] key)
         {
-            throw new NotImplementedException();
+            foreach (var item in key)
+            {
+                _memoryCache.Remove(item);
+            }
+            return Task.FromResult((long)key.Length);
         }
 
         public bool Exists(string key)
         {
-            throw new NotImplementedException();
+            return _memoryCache.TryGetValue(key,out _);
         }
 
         public Task<bool> ExistsAsync(string key)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_memoryCache.TryGetValue(key, out _));
         }
 
         public string Get(string key)
         {
-            throw new NotImplementedException();
+            return _memoryCache.Get<string>(key);
         }
 
         public Task<string> GetAsync(string key)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_memoryCache.Get<string>(key));
         }
 
         public bool Set(string key, object value)
         {
-            throw new NotImplementedException();
+            _memoryCache.Set(key,value);
+            return true;
         }
 
-        public bool Set(string key, object value, TimeSpan timeSpan)
+        public bool Set(string key, object value, TimeSpan expire)
         {
-            throw new NotImplementedException();
+            _memoryCache.Set(key,value,expire);
+            return true;
         }
 
         public Task<bool> SetAsync(string key, object value)
         {
-            throw new NotImplementedException();
+            _memoryCache.Set(key, value);
+            return Task.FromResult(true);
         }
 
-        public Task<bool> SetAsync(string key, object value, TimeSpan timeSpan)
+        public Task<bool> SetAsync(string key, object value, TimeSpan expire)
         {
-            throw new NotImplementedException();
+            _memoryCache.Set(key, value,expire);
+            return Task.FromResult(true);
         }
     }
 }

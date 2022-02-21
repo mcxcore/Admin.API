@@ -9,6 +9,7 @@ namespace Admin.Service.Admin.Auth
 {
     public interface IAuthService
     {
+        Task<IResponseOutput> GetPasswordPublicKey();
         Task<IResponseOutput> GetVerifyCode(string lastKey);
     }
 }

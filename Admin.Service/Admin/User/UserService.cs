@@ -28,7 +28,7 @@ namespace Admin.Service.Admin.User
                 {
                     var obj = _userRepository;
                     var list = _userRepository.Select.ToList();
-                    var userentity = new UserEntity { name = "111", sex = "222", bz = "333" };
+                    var userentity = new UserEntity { user_name = "111", sex = '1', bz = "333" };
                     _userRepository.Insert(userentity);
                     unitOfWork.Commit();
                    
@@ -43,9 +43,9 @@ namespace Admin.Service.Admin.User
 
         public async Task<IResponseOutput> Add() {
             var list = new UserEntity { };
-            var test = list.bz.ToString();
+            //var test = list.bz.ToString();
             var obj = _userRepository;
-            var userentity = new UserEntity{ name = "111", sex = "222", bz = "333" };
+            var userentity = new UserEntity{ user_name = "111", sex = '1', bz = "333" };
             await _userRepository.InsertAsync(userentity);
             return ResponseOutput.Ok();
         }

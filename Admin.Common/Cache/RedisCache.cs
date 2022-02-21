@@ -10,52 +10,52 @@ namespace Admin.Common.Cache
     {
         public long Del(params string[] key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.Del(key);
         }
 
         public Task<long> DelAsync(params string[] key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.DelAsync(key);
         }
 
         public bool Exists(string key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.Exists(key);
         }
 
         public Task<bool> ExistsAsync(string key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.ExistsAsync(key);
         }
 
         public string Get(string key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.Get<string>(key);
         }
 
         public Task<string> GetAsync(string key)
         {
-            throw new NotImplementedException();
+            return RedisHelper.GetAsync<string>(key);
         }
 
         public bool Set(string key, object value)
         {
-            throw new NotImplementedException();
+            return RedisHelper.Set(key,value);
         }
 
-        public bool Set(string key, object value, TimeSpan timeSpan)
+        public bool Set(string key, object value, TimeSpan expire)
         {
-            throw new NotImplementedException();
+            return RedisHelper.Set(key,value, expire);
         }
 
         public Task<bool> SetAsync(string key, object value)
         {
-            throw new NotImplementedException();
+            return RedisHelper.SetAsync(key,value);
         }
 
-        public Task<bool> SetAsync(string key, object value, TimeSpan timeSpan)
+        public Task<bool> SetAsync(string key, object value, TimeSpan expire)
         {
-            throw new NotImplementedException();
+            return RedisHelper.SetAsync(key,value,expire);
         }
     }
 }

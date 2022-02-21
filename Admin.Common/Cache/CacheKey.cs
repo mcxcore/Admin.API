@@ -17,5 +17,10 @@ namespace Admin.Common.Cache
         /// 用户权限
         /// </summary>
         public const string UserPermissionKey = "admin:user:permission:{0}";
+
+        /// <summary>
+        /// 用户登录错误次数
+        /// </summary>
+        public const string LoginErrorCountKey = "admin:login:error:{0}";
     }
 }

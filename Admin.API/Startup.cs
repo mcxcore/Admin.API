@@ -1,6 +1,7 @@
 using Admin.API.Db;
 using Admin.API.Filters;
 using Admin.Common.Attributes;
+using Admin.Common.Cache;
 using Autofac;
 using Dnc.Api.Throttle;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,17 @@ namespace Admin.API
                 options.Filters.Add(typeof(ApiThrottleActionFilter));
 
             });
+            if (true)
+            {
+                var redis = new CSRedis.CSRedisClient("127.0.0.1:6379,password=,defaultDatabase=0");
+                RedisHelper.Initialization(redis);
+                services.AddSingleton<ICache,RedisCache>();
+            }
+            else {
+                services.AddMemoryCache();
+                services.AddSingleton<ICache,MemoryCache>();
+            }
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin.API", Version = "v1" });

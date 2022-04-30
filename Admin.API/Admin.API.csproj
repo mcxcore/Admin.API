@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Admin.Common\Admin.Common.csproj" />
-    <ProjectReference Include="..\Admin.Service\Admin.Dto.csproj" />
+    <ProjectReference Include="..\Admin.Dto\Admin.Dto.csproj" />
   </ItemGroup>
 
 </Project>

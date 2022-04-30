@@ -1,4 +1,5 @@
 ﻿using Admin.Common.Attributes;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -32,12 +33,12 @@ namespace Admin.Common.Helpers
             int codeH = 36;
             int fontSize = 21;
 
-            Color[] color = {Color.White,Color.Black,Color.Blue,Color.Orange,Color.Green,Color.Yellow,Color.Red };
+            Color[] color = {Color.Black,Color.Blue,Color.Green};
             string[] fonts = new[] { "Times New Roman", "Verdana", "Arial", "Gungsuh", "Impact" };
 
             code = GenerateRandom(length);
 
-            using (Bitmap bitmap = new Bitmap(codeW, codeH))
+            using (Bitmap bitmap =new Bitmap(codeW, codeH))
             using (Graphics graphics = Graphics.FromImage(bitmap))
             using (MemoryStream ms = new MemoryStream()) {
                 graphics.Clear(Color.White);
@@ -70,8 +71,58 @@ namespace Admin.Common.Helpers
             }
         }
 
+        private byte[] GenCode(out string code,int length=4) {
+            int codeW = 110;
+            int codeH = 36;
+            int fontSize = 20;
+
+            SKColor[] color = { SKColors.Black, SKColors.Blue, SKColors.Green };
+            string[] fonts = new[] { "Times New Roman", "Verdana", "Arial", "Gungsuh", "Impact" };
+
+            code = GenerateRandom(length);
+
+            SKBitmap bitmap = new SKBitmap(codeW,codeH);
+            using (SKCanvas canvas = new SKCanvas(bitmap)) {
+                
+                canvas.DrawColor (SKColors.White);
+
+                #region 画噪线
+                Random random = new Random();
+                SKPaint sKPaint = new SKPaint() {Color=color[random.Next(color.Length)] };
+                int x1=random.Next(codeW);
+                int y1 = random.Next(codeH);
+                int x2 = random.Next(codeW);
+                int y2 = random.Next(codeH);
+                canvas.DrawLine(x1,y1,x2,y2,sKPaint);
+                #endregion
+
+                #region 验证码
+                SKRect size = new SKRect();
+                float temp = (bitmap.Width / 4 - size.Size.Width) / 2;
+                float temp1 = bitmap.Height - (bitmap.Height - size.Size.Height) / 2;
+                sKPaint = new SKPaint() {
+                    TextSize = 20,
+                    IsAntialias = true,
+                    Typeface = SKTypeface.FromFamilyName(fonts[random.Next(fonts.Length)]),
+                    Color = new SKColor((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255))
+                };
+                for (int i = 0; i < code.Length; i++) {
+                    canvas.DrawText(code[i].ToString(), temp+20*i,temp1, sKPaint);
+                }
+                #endregion
+
+                SKImage img = SKImage.FromBitmap(bitmap);
+                SKData sd = img.Encode();
+                var ms = sd.AsStream();
+                byte[] bytes = new byte[ms.Length];
+                ms.Read(bytes,0,bytes.Length);
+                ms.Seek(0,SeekOrigin.Begin);
+                return bytes;
+            }
+        }
+
         public string GetBase64String(out string code, int length=4) {
-            return Convert.ToBase64String(Draw(out code,length));
+            return Convert.ToBase64String(GenCode(out code,length));
         }
     }
 }

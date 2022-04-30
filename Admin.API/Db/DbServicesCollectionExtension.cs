@@ -22,11 +22,12 @@ namespace Admin.API.Db
         /// <returns></returns>
         public async static Task AddDbAsync(this IServiceCollection services, IHostEnvironment env)
         {
-            string connectionstring = "Server=124.223.69.99; Port=3306; Database=admindb_test; Uid=root; Pwd=root; Charset=utf8mb4;";
+            string connectionstring = "Server=124.222.246.98; Port=3306; Database=admindb; Uid=root; Pwd=123456; Charset=utf8mb4;";
+            string slaveconnect = "Server=103.133.177.134; Port=3306; Database=admindb; Uid=root; Pwd=123456; Charset=utf8mb4;";
             var fsql = new FreeSqlBuilder()
                  .UseConnectionString(DataType.MySql,connectionstring)
+                 //.UseSlave(slaveconnect)
                  .UseAutoSyncStructure(true)
-                 .UseNameConvert(FreeSql.Internal.NameConvertType.PascalCaseToUnderscoreWithLower)
                  .UseMonitorCommand(cmd => Trace.WriteLine(cmd.CommandText))
                  .Build();
             services.AddSingleton<IFreeSql>(fsql);

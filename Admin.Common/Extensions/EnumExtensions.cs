@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Admin.Common.Extensions
+namespace Admin
 {
     public static class EnumExtensions
     {

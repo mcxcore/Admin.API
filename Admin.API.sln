@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.API", "Admin.API\Admin.API.csproj", "{55D23E0A-02F1-4C57-8CBA-BA57903DCDE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Service", "Admin.Service\Admin.Service.csproj", "{1A210397-1819-40BF-AD16-75D05348ECA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Dto", "Admin.Service\Admin.Dto.csproj", "{1A210397-1819-40BF-AD16-75D05348ECA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Common", "Admin.Common\Admin.Common.csproj", "{5201DCB9-2112-4531-80B5-561BB339F9B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Common", "Admin.Common\Admin.Common.csproj", "{5201DCB9-2112-4531-80B5-561BB339F9B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Repository", "Admin.Repository\Admin.Repository.csproj", "{7135975C-FBC3-44CE-8B25-661C7C318C1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Repository", "Admin.Repository\Admin.Repository.csproj", "{7135975C-FBC3-44CE-8B25-661C7C318C1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Model", "Admin.Model\Admin.Model.csproj", "{B04E23C3-92B4-4330-8D4F-D00B9DED1155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Model", "Admin.Model\Admin.Model.csproj", "{B04E23C3-92B4-4330-8D4F-D00B9DED1155}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

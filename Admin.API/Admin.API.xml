@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Admin.API</name>
+    </assembly>
+    <members>
+        <member name="T:Admin.API.Db.DbServicesCollectionExtension">
+            <summary>
+            数据库服务扩展
+            </summary>
+        </member>
+        <member name="M:Admin.API.Db.DbServicesCollectionExtension.AddDbAsync(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Hosting.IHostEnvironment)">
+            <summary>
+            添加数据库
+            </summary>
+            <param name="services"></param>
+            <param name="env"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Admin.API.Enums.StatusCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.StatusNotOk">
+            <summary>
+            操作失败
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.Status1Ok">
+            <summary>
+            操作成功
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.Status401Unauthorized">
+            <summary>
+            未登录(需要重新登录)
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.Status403Forbidden">
+            <summary>
+            权限不足
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.Status404NotFound">
+            <summary>
+            资源不存在
+            </summary>
+        </member>
+        <member name="F:Admin.API.Enums.StatusCode.Status500InternalServerError">
+            <summary>
+            系统内部错误（非业务代码里显式抛出的异常，例如由于数据不正确导致空指针异常、数据库异常等等）
+            </summary>
+        </member>
+        <member name="M:Admin.API.Services.Admin.AuthService.GetVerifyCode(System.String)">
+            <summary>
+            获取验证码
+            </summary>
+            <param name="lastKey"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Admin.API.Services.Admin.UserService">
+            <summary>
+            用户服务
+            </summary>
+        </member>
+        <member name="M:Admin.API.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
+            <summary>
+            配置容器
+            </summary>
+            <param name="builder"></param>
+        </member>
+    </members>
+</doc>

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Admin.Repository\Admin.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Admin\User\" />
+  </ItemGroup>
+
 </Project>

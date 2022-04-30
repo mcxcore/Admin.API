@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Admin.API.Enums;
-using Admin.Common.Extensions;
 
 namespace Admin.API.Filters
 {
@@ -29,7 +28,8 @@ namespace Admin.API.Filters
             string message;
             if (_env.IsProduction())
             {
-                message = StatusCode.Status500InternalServerError.ToDescription();
+                //message = StatusCode.Status500InternalServerError.ToDescription();
+                message = context.Exception.Message;
             }
             else {
                 message = context.Exception.Message;

@@ -1,4 +1,4 @@
-﻿using Admin.Model.Admin;
+﻿using Admin.Model;
 using FreeSql;
 using System;
 using System.Collections.Generic;
@@ -8,13 +8,10 @@ using System.Threading.Tasks;
 
 namespace Admin.Repository.Admin.User
 {
-    public class UserRepository: DefaultRepository<UserEntity,int>, IUserRepository
+    public class UserRepository: DefaultRepository<ad_user,int>, IUserRepository
     {
         public UserRepository(UnitOfWorkManager uowm):base(uowm?.Orm,uowm) {
             
-        }
-        public List<UserEntity> GetUsers() {
-            return Select.Page(1, 10).ToList();
         }
     }
 }

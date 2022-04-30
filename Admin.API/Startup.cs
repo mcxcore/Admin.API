@@ -10,11 +10,14 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Panda.DynamicWebApi;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -24,7 +27,7 @@ namespace Admin.API
     public class Startup
     {
         private readonly IHostEnvironment env;
-
+        private readonly string BasePath = AppContext.BaseDirectory;
         public Startup(IConfiguration configuration,IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -45,27 +48,39 @@ namespace Admin.API
             });
             if (true)
             {
-                var redis = new CSRedis.CSRedisClient("127.0.0.1:6379,password=,defaultDatabase=0");
+                var redis = new CSRedis.CSRedisClient("124.222.246.98:6379,password=123456,defaultDatabase=0");
                 RedisHelper.Initialization(redis);
                 services.AddSingleton<ICache,RedisCache>();
             }
-            else {
-                services.AddMemoryCache();
-                services.AddSingleton<ICache,MemoryCache>();
-            }
-            
             services.AddSwaggerGen(c =>
             {
+                c.DocInclusionPredicate((docName, description) => true);
+                c.CustomSchemaIds(type => type.FullName);
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin.API", Version = "v1" });
-            });
 
+                var xmlPath = Path.Combine(BasePath,"Admin.API.xml");
+                c.IncludeXmlComments(xmlPath,true);
+            });
             #region ÏÞÁ÷
             services.AddApiThrottle(options =>
             {
+                options.onIntercepted = (context, value, where) =>
+                {
+                    var res = new JsonResult(Admin.Common.Output.ResponseOutput.NotOk());
+                    return res;
+                };
                 options.UseRedisCacheAndStorage(opts =>
                 {
-                    opts.ConnectionString = "127.0.0.1:6379,password=,defaultDatabase=0";
+                    opts.ConnectionString = "124.222.246.98:6379,password=123456,defaultDatabase=0";
                 });
+            });
+            #endregion
+
+            #region ¶¯Ì¬API
+            services.AddDynamicWebApi((options) => {
+                options.DefaultApiPrefix = "api/[area]";
+                options.RemoveActionPostfixes.Clear();
+                options.GetRestFulActionName = (actionName) => actionName;
             });
             #endregion
         }
@@ -74,6 +89,7 @@ namespace Admin.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
+            //if(true)
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();

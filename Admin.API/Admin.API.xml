@@ -4,6 +4,11 @@
         <name>Admin.API</name>
     </assembly>
     <members>
+        <member name="T:Admin.API.Attributes.PermissionAttribute">
+            <summary>
+            权限属性
+            </summary>
+        </member>
         <member name="T:Admin.API.Db.DbServicesCollectionExtension">
             <summary>
             数据库服务扩展
@@ -52,12 +57,22 @@
             系统内部错误（非业务代码里显式抛出的异常，例如由于数据不正确导致空指针异常、数据库异常等等）
             </summary>
         </member>
-        <member name="M:Admin.API.Services.Admin.AuthService.GetVerifyCode(System.String)">
+        <member name="M:Admin.API.Services.Admin.GenCodeService.GetList(Admin.Common.Page.PageInput{Admin.Dto.Admin.GenCode.Input.GenCodeSearchInput})">
             <summary>
-            获取验证码
+            查询数据库表
             </summary>
-            <param name="lastKey"></param>
             <returns></returns>
+        </member>
+        <member name="M:Admin.API.Services.Admin.GenCodeService.syncDatabaseTable">
+            <summary>
+            同步数据库表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Admin.API.Services.Admin.OprationLogService.Add">
+            <summary>
+            添加日志
+            </summary>
         </member>
         <member name="T:Admin.API.Services.Admin.UserService">
             <summary>

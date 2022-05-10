@@ -5,18 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="CSRedisCore" Version="3.6.8" />
-    <PackageReference Include="FreeSql" Version="3.0.100" />
-    <PackageReference Include="FreeSql.Provider.MySql" Version="3.0.100" />
-    <PackageReference Include="FreeSql.Repository" Version="3.0.100" />
+    <PackageReference Include="FreeSql" Version="3.2.610" />
+    <PackageReference Include="FreeSql.Provider.MySql" Version="3.2.610" />
+    <PackageReference Include="FreeSql.Repository" Version="3.2.610" />
+    <PackageReference Include="Hei.Captcha" Version="0.3.0" />
     <PackageReference Include="Masuit.Tools.Core" Version="2.4.8.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.17.0" />
     <PackageReference Include="Panda.DynamicWebApi" Version="1.2.0" />
-    <PackageReference Include="SkiaSharp" Version="2.80.3" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
   </ItemGroup>
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Admin.Common.Output
+namespace Admin.Common.ResponseOutput
 {
     public class ResponseOutput<T>:IResponseOutput
     {

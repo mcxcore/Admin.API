@@ -1,3 +1,10 @@
 {
-
+  //监听所有操作
+  "monitorCommand": false,
+  //监听Curd操作
+  "curd": true,
+  //数据库类型 MySql = 0, SqlServer = 1, PostgreSQL = 2, Oracle = 3, Sqlite = 4, OdbcOracle = 5, OdbcSqlServer = 6, OdbcMySql = 7, OdbcPostgreSQL = 8, Odbc = 9, OdbcDameng = 10, MsAccess = 11, Dameng = 12, OdbcKingbaseES = 13, ShenTong = 14, KingbaseES = 15, Firebird = 16
+  "type": "Mysql",
+  "database": "admindb",
+  "connectionString": "Server=124.222.246.98; Port=3306; Database=admindb; Uid=root; Pwd=123456; Charset=utf8mb4;SslMode=none;Max pool size=10"
 }

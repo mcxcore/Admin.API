@@ -14,6 +14,6 @@ namespace Admin.Dto.Admin.Auth.Output
 
         public string nickName { get; set; }
 
-        public string roles { get; set; }
+        public List<string> roles { get; set; }
     }
 }

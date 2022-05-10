@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Masuit.Tools.Strings;
 
 namespace Admin.Common.Auth
 {
     public class User : IUser
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly NumberFormater nf = new NumberFormater();
         public User(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -19,7 +21,7 @@ namespace Admin.Common.Auth
             get {
                 var id = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimAttributes.userId);
                 if (id != null && id.Value != "") {
-                    return 1L;
+                    return nf.FromString(id.ToString());
                 }
                 return 0L;
             }

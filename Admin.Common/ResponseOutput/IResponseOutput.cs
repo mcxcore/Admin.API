@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Admin.Common.Output
+namespace Admin.Common.ResponseOutput
 {
 
     public interface IResponseOutput

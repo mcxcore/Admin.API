@@ -1,4 +1,5 @@
-﻿using Admin.Common.Configs;
+﻿using Admin.Common.Attributes;
+using Admin.Common.Configs;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Security.Claims;
@@ -6,13 +7,14 @@ using System.Text;
 
 namespace Admin.Common.Auth
 {
+    [SingleInstance]
     public class UserToken : IUserToken
     {
-        private readonly JwtConfig _jwtConfig;
-        public UserToken(JwtConfig jwtConfig)
-        {
-            _jwtConfig = jwtConfig;
-        }
+        private readonly JwtConfig _jwtConfig = new JwtConfig();
+        //public UserToken(JwtConfig jwtConfig)
+        //{
+        //    _jwtConfig = jwtConfig;
+        //}
 
         public string Create(Claim[] claims)
         {

@@ -22,7 +22,7 @@ namespace Admin.API
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().UseUrls("http://0.0.0.0:9005");
                 });
     }
 }

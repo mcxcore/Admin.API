@@ -1,18 +1,24 @@
+using Admin.API.Auth;
 using Admin.API.Db;
 using Admin.API.Filters;
 using Admin.Common.Attributes;
+using Admin.Common.Auth;
 using Admin.Common.Cache;
+using Admin.Common.Configs;
+using Admin.Common.Helpers;
 using Autofac;
 using Dnc.Api.Throttle;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Panda.DynamicWebApi;
 using System;
@@ -20,7 +26,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Text;
+using AutoMapper;
 
 namespace Admin.API
 {
@@ -28,10 +35,12 @@ namespace Admin.API
     {
         private readonly IHostEnvironment env;
         private readonly string BasePath = AppContext.BaseDirectory;
+        private readonly ConfigHelper _configHelper;
         public Startup(IConfiguration configuration,IWebHostEnvironment env)
         {
             Configuration = configuration;
             this.env = env;
+            _configHelper = new ConfigHelper();
         }
 
         public IConfiguration Configuration { get; }
@@ -39,6 +48,32 @@ namespace Admin.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region 身份认证授权
+            services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
+            services.TryAddSingleton<IUser, User>();
+            var jwtConfig = _configHelper.Get<JwtConfig>("jwt",env.EnvironmentName,true);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = nameof(ResponseAuthenticationHandler);
+                options.DefaultForbidScheme = nameof(ResponseAuthenticationHandler);
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtConfig.Issuser,
+                    ValidAudience = jwtConfig.Audience,
+                    IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecurityKey)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            })
+            .AddScheme<AuthenticationSchemeOptions, ResponseAuthenticationHandler>(nameof(ResponseAuthenticationHandler),o=> { });
+            #endregion
             //数据库
             services.AddDbAsync(env).Wait();
             services.AddControllers(options=> {
@@ -61,12 +96,17 @@ namespace Admin.API
                 var xmlPath = Path.Combine(BasePath,"Admin.API.xml");
                 c.IncludeXmlComments(xmlPath,true);
             });
+
+            #region AutoMapper映射
+            var assembly = Assembly.Load("Admin.Dto");
+            services.AddAutoMapper(assembly);
+            #endregion
             #region 限流
             services.AddApiThrottle(options =>
             {
                 options.onIntercepted = (context, value, where) =>
                 {
-                    var res = new JsonResult(Admin.Common.Output.ResponseOutput.NotOk());
+                    var res = new JsonResult(Admin.Common.ResponseOutput.ResponseOutput.NotOk());
                     return res;
                 };
                 options.UseRedisCacheAndStorage(opts =>
@@ -79,17 +119,24 @@ namespace Admin.API
             #region 动态API
             services.AddDynamicWebApi((options) => {
                 options.DefaultApiPrefix = "api/[area]";
-                options.RemoveActionPostfixes.Clear();
+                options.RemoveControllerPostfixes = new List<string>() {"Service" };
+                options.RemoveActionPostfixes = new List<string>() { "Async" };
                 options.GetRestFulActionName = (actionName) => actionName;
+
             });
+            #endregion
+
+            #region 验证码
+            var builder =new ConfigurationBuilder().Build();
+            services.AddCaptcha(builder);
             #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            //if(true)
+            //if (env.IsDevelopment())
+            if(true)
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -99,7 +146,7 @@ namespace Admin.API
                 });
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -122,17 +169,24 @@ namespace Admin.API
             #region Autofac IOC容器
             try
             {
-                 //无接口注入单列
-                var assemblyCommon = Assembly.Load("Admin.Common");
-                builder.RegisterAssemblyTypes(assemblyCommon)
-                    .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
-                    .SingleInstance();
 
-                //有接口注入单例
+                var assemblyCommon = Assembly.Load("Admin.Common");
+
+                //无接口注入单例
                 builder.RegisterAssemblyTypes(assemblyCommon)
-                    .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
-                    .AsImplementedInterfaces()
-                    .SingleInstance();
+                   .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
+                   .SingleInstance();
+
+                builder.RegisterAssemblyTypes(assemblyCommon)
+                .Where(t => t.GetCustomAttribute<SingleInstanceAttribute>() != null)
+                  .AsImplementedInterfaces()
+                  .InstancePerLifetimeScope()
+                  .PropertiesAutowired();
+
+                builder.RegisterAssemblyTypes(assemblyCommon)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .PropertiesAutowired();
 
                 //Repository
                 var assemblyRepository = Assembly.Load("Admin.Repository");
@@ -147,7 +201,6 @@ namespace Admin.API
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope()
                     .PropertiesAutowired();
-
             }
             catch (Exception ex) {
                 

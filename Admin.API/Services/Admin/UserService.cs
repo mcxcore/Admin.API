@@ -25,7 +25,7 @@ namespace Admin.API.Services.Admin
             _userRepository = userRepository;
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [Login]
         public async Task<IResponseOutput> Get() {
             //var entity = new ad_user() { deptId = 100,userName= };

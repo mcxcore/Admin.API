@@ -4,9 +4,9 @@
   //订阅者
   "audience": "http://127.0.0.1:8000",
   //密钥
-  "securityKey": "mcx980425!@#goggogo",
+  "securityKey": "ertJKl#521*a@790asD&1#",
   //有效期(分钟)
   "expires": 120,
   //刷新有效期
-  "refreshExpires":1440
+  "refreshExpires": 1440
 }

@@ -150,6 +150,7 @@ namespace Admin.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseApiThrottle();
